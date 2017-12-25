@@ -9,8 +9,11 @@ typedef unsigned char byte;
 
 const byte p;
 
-inline byte add(byte a, byte b) {
-    return a ^ b;
-}
+// sum of two polynomials mod p
+#define ADD(x, y) (byte)((x) ^ (y))
+
+
+// product of two polynomials mod p
+byte mul(byte a, byte b);
 
 #endif //AES_GF_OPERATIONS_H

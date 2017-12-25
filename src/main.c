@@ -3,7 +3,7 @@
 #include "gf_operations.h"
 
 int main() {
-    byte x = 1, y = 5;
-    printf("%d", p);
+    byte x = 0x1, y = 0x2;
+    printf("%d", mul(x, y));
     return 0;
 }
