@@ -2,7 +2,7 @@
 // Created by Rami on 25/12/2017.
 //
 
-#include "../include/bytes.h"
+#include "bytes.h"
 
 inline byte and(byte x, byte y) {
     return (byte) (x & y);

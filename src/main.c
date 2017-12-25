@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "../include/bytes.h"
+#include "bytes.h"
 
 int main() {
     byte x = 1, y = 5;
