@@ -15,14 +15,28 @@ const byte p = 0b00011011; // = 0x1B
 
 byte mul(byte a, byte b) {
     byte t = 0;
+    int temp_shift;
     while (a && b) {
-        if (b | 1) {
+        if (b & 1) {
             t = ADD(t, a);
         }
         b >>= 1;  // b = b / x
-        if ((a <<= 1) | 0x100) {  // a = a*x, maybe we need to add p to t.
+        temp_shift = a << 1;
+        if (temp_shift & 0x100) {
             t = ADD(t, p);
         }
+        a = (byte) temp_shift; // a = a*x, maybe we need to add p to t.
     }
     return t;
+}
+
+int deg(byte a) {
+    if (a == 0) {
+        return -1;
+    }
+    int d = 1;
+    while ((a <<= 1) & 0x100) {
+        ++d;
+    }
+    return 8 - d;
 }
