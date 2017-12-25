@@ -5,14 +5,12 @@
 #ifndef AES_GF_OPERATIONS_H
 #define AES_GF_OPERATIONS_H
 
-#include "bytes.h"
+typedef unsigned char byte;
 
-typedef byte polynomial;
+const byte p;
 
-const polynomial p;
-
-inline polynomial add(polynomial a, polynomial b) {
-    return xor(a, b);
+inline byte add(byte a, byte b) {
+    return a ^ b;
 }
 
 #endif //AES_GF_OPERATIONS_H

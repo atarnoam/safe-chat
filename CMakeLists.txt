@@ -7,4 +7,4 @@ include_directories(include)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -I -Wall -Wextra -std=c99")
 
-add_executable(aes src/main.c src/bytes.c include/bytes.h src/gf_operations.c include/gf_operations.h)
+add_executable(aes src/main.c src/gf_operations.c include/gf_operations.h)

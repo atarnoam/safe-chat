@@ -11,4 +11,4 @@
  * only the size of one byte.
  */
 
-const polynomial p = 0b00011011; // = 0x1B
+const byte p = 0b00011011; // = 0x1B
