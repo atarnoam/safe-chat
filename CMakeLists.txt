@@ -5,4 +5,4 @@ set(CMAKE_C_STANDARD 99)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -std=c99")
 
-add_executable(aes main.c bytes.c bytes.h)
+add_executable(aes src/main.c src/bytes.c include/bytes.h)
