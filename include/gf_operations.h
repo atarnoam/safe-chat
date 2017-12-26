@@ -15,6 +15,7 @@ const byte p;
 // product of two polynomials mod p
 byte mul(byte a, byte b);
 
+// degree of a polynomial
 int deg(byte a);
 
 #endif //AES_GF_OPERATIONS_H
