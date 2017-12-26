@@ -6,7 +6,7 @@
 
 /*
  * In this file, we are dealing with bytes, which we see as polynomials over the finite field consisting of all
- * polynomials with coefficients in Z2={0, 1} with degree less than 8, with operations of addition and multiplication
+ * polynomials with coefficients in Z2 = {0, 1} with degree less than 8, with operations of addition and multiplication
  * modulus p, where p(x) = x^8+x^4+x^3+x+1.
  */
 
@@ -22,10 +22,10 @@ byte mul(byte a, byte b) {
         }
         b >>= 1;  // b = b / x
         temp_shift = a << 1;
-        if (temp_shift & 0x100) {
+        if (temp_shift & 0x100) { // maybe we need to add p to t.
             t = ADD(t, p);
         }
-        a = (byte) temp_shift; // a = a*x, maybe we need to add p to t.
+        a = (byte) temp_shift; // a = a*x
     }
     return t;
 }
@@ -34,9 +34,9 @@ int deg(byte a) {
     if (a == 0) {
         return -1;
     }
-    int d = 1;
-    while ((a <<= 1) & 0x100) {
+    int d = 0;
+    while (a >>= 1) {
         ++d;
     }
-    return 8 - d;
+    return d;
 }

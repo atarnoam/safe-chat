@@ -12,7 +12,6 @@ const byte p;
 // sum of two polynomials mod p
 #define ADD(x, y) (byte)((x) ^ (y))
 
-
 // product of two polynomials mod p
 byte mul(byte a, byte b);
 
