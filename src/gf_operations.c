@@ -15,7 +15,7 @@ const byte p = 0b00011011; // = 0x1B
 
 byte mul(byte a, byte b) {
     byte t = 0;
-    int temp_shift;
+    short temp_shift; // short is two bytes
     while (a && b) {
         if (b & 1) {
             t = ADD(t, a);
