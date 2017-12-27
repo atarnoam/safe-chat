@@ -5,6 +5,6 @@ set(CMAKE_C_STANDARD 99)
 
 include_directories(include)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -I -Wall -Wextra -std=c99")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -I -Wall -Wextra -masm=intel")
 
 add_executable(aes src/main.c src/gf_operations.c include/gf_operations.h src/key_schedule.c include/key_schedule.h)

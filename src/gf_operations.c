@@ -20,12 +20,12 @@ byte mul(byte a, byte b) {
         if (b & 1) {
             t = ADD(t, a);
         }
-        b >>= 1;  // b = b / x
-        temp_shift = a << 1;
+        temp_shift = a << 1; // temp_shift = a*x
+        a = (byte) temp_shift; // a = a * x
         if (temp_shift & 0x100) { // maybe we need to add p to t.
-            t = ADD(t, p);
+            a = ADD(a, p);
         }
-        a = (byte) temp_shift; // a = a*x
+        b >>= 1;  // b = b / x
     }
     return t;
 }
