@@ -3,14 +3,22 @@
 #include "gf_operations.h"
 #include "key_schedule.h"
 
-int main() {
-    byte x[10] = {0x2};
-    printf("%x\n", mul(0x40, 0x02));
-    for (int i = 1; i < 10; ++i) {
-        x[i] = mul(x[i - 1], 0x02);
-        printf("%x ", x[i]);
+void print_byte_arr(const byte *a, size_t n) {
+    for (size_t i = 0; i < n; ++i) {
+        printf("%x ", a[i]);
     }
     printf("\n");
-    printf("%x, %x, %x, %x\n", rcon(4), rcon(6), rcon(8), rcon(255));
+}
+
+int main() {
+
+    for (int i = 0; i < 256; ++i) {
+        byte s = s_box(i);
+        printf("0x%02x ", s);
+        if ((i + 1) % 16 == 0)
+            printf("\n");
+    }
+    printf("\n");
+
     return 0;
 }

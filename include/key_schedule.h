@@ -11,3 +11,5 @@
 
 // 2^(n-1) mod p, n > 0
 byte rcon(int n);
+
+void rotate(byte a[4]);

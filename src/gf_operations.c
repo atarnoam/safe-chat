@@ -30,7 +30,7 @@ byte mul(byte a, byte b) {
     return t;
 }
 
-int deg(byte a) {
+int deg(short a) {
     if (a == 0) {
         return -1;
     }
@@ -39,4 +39,53 @@ int deg(byte a) {
         ++d;
     }
     return d;
+}
+
+// divides two polynomials over Z2[x].
+// The quotient is in res[0] and the remainder in res[1].
+void div(short f, byte g, byte *res) {
+    short h = f;
+    byte q = 0, monom;
+    while (deg(h) >= deg(g)) {
+        monom = (byte) 1 << deg(h) - deg(g);
+        q = ADD(q, monom);
+        h = ADD(h, (byte) (g << deg(h) - deg(g)));
+    }
+    res[0] = q;
+    res[1] = (byte) h;
+}
+
+// a good old swap function
+static void swap(byte *a, byte *b) {
+    byte temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+// a^-1 (mod p). We assume that a != 0.
+byte inverse(byte a) {
+    byte t = 0, new_t = 1, div_res[2], new_r = a;
+    short r = 0x11B;
+    while (new_r) {
+        div(r, new_r, div_res);
+        r = div_res[1];
+        swap(&new_r, (byte *) &r);
+        t = ADD(t, mul(div_res[0], new_t));
+        swap(&new_t, &t);
+    }
+    return t;
+}
+
+static inline byte rotate_left(byte a) {
+    return (a << 1) | (a >> 7);
+}
+
+// the Rijndael substitution box
+byte s_box(byte a) {
+    byte s = inverse(a), result = 0;
+    for (int i = 0; i < 5; ++i) {
+        result = ADD(result, s);
+        s = rotate_left(s);
+    }
+    return (byte) (result ^ 99);
 }

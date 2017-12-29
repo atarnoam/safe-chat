@@ -11,3 +11,13 @@ byte rcon(int n) {
     }
     return exp;
 }
+
+// provided a 32-bit word, it rotates it 1 byte to the left
+void rotate(byte a[4]) {
+    byte temp = a[0];
+
+    for (int i = 0; i < 2; ++i) {
+        a[i] = a[i + 1];
+    }
+    a[3] = temp;
+}
