@@ -23,7 +23,7 @@ byte rcon(int n) {
 }
 
 inline byte byte_at(word a, int i) {
-    return (byte) (a >> 8 * (7 - i));
+    return ((byte *) (&a))[3 - i];
 }
 
 // provided a word, it rotates it 1 byte to the left
