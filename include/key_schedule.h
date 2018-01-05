@@ -5,9 +5,14 @@
 #ifndef AES_KEY_SCHEDULE_H
 #define AES_KEY_SCHEDULE_H
 
+#include <stdint.h>
 #include "gf_operations.h"
 
-typedef unsigned int word; // a word is an array of 4 bytes.
+/* A word is an array of 4 bytes.
+ * Because we are working on a Intel CPU, which uses little endian format, The bytes in the word
+ * will be stored accordingly.
+ */
+typedef uint32_t word;
 
 void key_schedule(const byte key[], word expanded_key[]);
 
