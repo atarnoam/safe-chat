@@ -32,21 +32,26 @@ void add_round_key(word state[4], const word key[4]) {
     }
 }
 
-const byte mix_col_mat[4][4] = {{2, 3, 1, 1},
-                                {1, 2, 3, 1},
-                                {1, 1, 2, 3},
-                                {3, 1, 1, 2}};
+const byte mix_col_mat[4][4] = {{0x02, 0x03, 0x01, 0x01},
+                                {0x01, 0x02, 0x03, 0x01},
+                                {0x01, 0x01, 0x02, 0x03},
+                                {0x03, 0x01, 0x01, 0x02}};
 
 void mix_columns(word state[4]) {
-    byte *mat = (byte *) (&state);
-    // initialize to 0
+    // this is actually a 4x4 matrix, note that "mat[i][j]" is mat[4*i + j].
+    byte *mat = (byte *) state;
+    // initialize to 0.
     byte new_state[4 * 4] = {0};
+
+    // multiply mix_col_mat by mat.
     for (int i = 0; i < 4; ++i) {
         for (int j = 0; j < 4; ++j) {
-            new_state[i + 4 * j] ^= mul(mix_col_mat[i][j], mat[i + 4 * j]);
+            for (int k = 0; k < 4; ++k) {
+                new_state[4 * i + j] ^= mul(mix_col_mat[i][k], mat[4 * k + j]);
+            }
         }
     }
     for (int i = 0; i < 4; ++i) {
-        state[i] = ((word *) new_state)[4 * i];
+        state[i] = *(word *) (new_state + 4 * i);
     }
 }
