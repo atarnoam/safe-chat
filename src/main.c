@@ -25,19 +25,13 @@ int main() {
     key_schedule(key, expanded_key);
     print_word_arr(expanded_key, 60, 4);
 
-    word s[] = {0x00010203, 0x04050607, 0x08090a0b, 0x0c0d0e0f};
+    word s[] = {0xc601f2db, 0xc6010a13, 0xc6012253, 0xc6015c45};
     print_state(s);
 
     printf("\n");
-    //shift_rows(s);
-    //print_state(s);
+    mix_columns(s);
 
-    byte mat[4][4];
-    to_matrix(s, mat);
-
-    for (int i = 0; i < 4; ++i) {
-        print_byte_arr(mat[i], 4, 60);
-    }
+    print_state(s);
 
     return 0;
 }

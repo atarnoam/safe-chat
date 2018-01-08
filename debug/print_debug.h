@@ -19,7 +19,10 @@ void print_byte_arr(const byte *a, size_t n, size_t row_size);
 void print_word_arr(const word *a, size_t n, size_t row_size);
 
 inline void print_word(word a, bool newl) {
-    printf("%02x %02x %02x %02x ", byte_at(a, 0), byte_at(a, 1), byte_at(a, 2), byte_at(a, 3));
+    byte *p = (byte *) (&a);
+    for (int i = 0; i < 4; ++i) {
+        printf("%02x ", p[i]);
+    }
     if (newl)
         printf("\n");
 }

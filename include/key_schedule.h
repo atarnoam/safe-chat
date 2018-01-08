@@ -16,8 +16,6 @@ typedef uint32_t word;
 
 void key_schedule(const byte key[], word expanded_key[]);
 
-byte byte_at(word a, int i);
-
 word sub_word(word w);
 
 #endif //AES_KEY_SCHEDULE_H

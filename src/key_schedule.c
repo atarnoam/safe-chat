@@ -21,10 +21,6 @@ byte rcon(int n) {
     return exp;
 }
 
-inline byte byte_at(word a, int i) {
-    return ((byte *) (&a))[i];
-}
-
 // provided a word, it rotates it 1 byte to the left. Yes, I am rotating it to the right. Blame Intel.
 static inline word rotate(word w) {
     return w >> 8 | w << 8 * 3;
