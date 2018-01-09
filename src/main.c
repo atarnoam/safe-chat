@@ -25,11 +25,11 @@ int main() {
     key_schedule(key, expanded_key);
     print_word_arr(expanded_key, 60, 4);
 
-    word s[] = {0xc601f2db, 0xc6010a13, 0xc6012253, 0xc6015c45};
+    word s[] = {0x73e92e6b, 0x933d40c1, 0x177e9fbe, 0x2a1196e2};
     print_state(s);
 
     printf("\n");
-    mix_columns(s);
+    encrypt(s, expanded_key);
 
     print_state(s);
 

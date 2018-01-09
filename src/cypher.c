@@ -55,3 +55,19 @@ void mix_columns(word state[4]) {
         state[i] = *(word *) (new_state + 4 * i);
     }
 }
+
+// encrypts plaintext, uses expanded key.
+void encrypt(word plaintext[4], word expanded_key[]) {
+    add_round_key(plaintext, expanded_key);
+    expanded_key += 4;
+
+    for (int i = 0; i < 13; ++i, expanded_key += 4) {
+        sub_bytes(plaintext);
+        shift_rows(plaintext);
+        mix_columns(plaintext);
+        add_round_key(plaintext, expanded_key);
+    }
+    sub_bytes(plaintext);
+    shift_rows(plaintext);
+    add_round_key(plaintext, expanded_key);
+}
