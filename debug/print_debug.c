@@ -18,6 +18,7 @@ void print_state(word s[]) {
     for (int i = 0; i < 4; ++i) {
         print_word(s[i], true);
     }
+    printf("\n");
 }
 
 void print_word_arr(const word *a, size_t n, size_t row_size) {

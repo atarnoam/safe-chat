@@ -14,6 +14,9 @@
 
 #define N 32
 
+#define debug_print(fmt, ...) \
+            do { if (DEBUG) printf(fmt, ##__VA_ARGS__); } while (0)
+
 void print_byte_arr(const byte *a, size_t n, size_t row_size);
 
 void print_word_arr(const word *a, size_t n, size_t row_size);
