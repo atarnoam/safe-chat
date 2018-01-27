@@ -17,4 +17,6 @@ byte mul(byte a, byte b);
 
 byte s_box(byte a);
 
+byte inv_s_box(byte a);
+
 #endif //AES_GF_OPERATIONS_H

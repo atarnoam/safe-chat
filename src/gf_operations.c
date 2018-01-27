@@ -2,8 +2,8 @@
 // Created by Noam on 25/12/2017.
 //
 
+#include <stdio.h>
 #include "gf_operations.h"
-
 /*
  * In this file, we are dealing with bytes, which we see as polynomials over the finite field consisting of all
  * polynomials with coefficients in Z2 = {0, 1} with degree less than 8, with operations of addition and multiplication
@@ -87,5 +87,37 @@ byte s_box(byte a) {
         result = ADD(result, s);
         s = rotate_left(s);
     }
-    return (byte) (result ^ 99);
+    return (byte) (result ^ 0x63);
+}
+
+static inline byte rotate_right(byte a) {
+    return (a >> 1) | (a << 7);
+}
+
+// returns parity of number of 1 bits in x
+static inline int parity(byte x) {
+    x ^= x >> 4;
+    x ^= x >> 2;
+    x ^= x >> 1;
+    return x & 1;
+}
+
+// the inverse Rijndael substitution box
+byte inv_s_box(byte a) {
+    byte row = 0b01010010, result = 0;
+
+    // we are caculating a matrix multiplication.
+    for (int i = 0; i < 8; ++i) {
+        result <<= 1;
+        if (parity(row & a)) {
+            result |= 1;
+        }
+        row = rotate_right(row);
+    }
+
+    // add a vector
+    result ^= 0x05;
+
+    // return the inverse
+    return inverse(result);
 }

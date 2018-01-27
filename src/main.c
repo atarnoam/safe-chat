@@ -7,6 +7,7 @@
 #include "key_schedule.h"
 #include "cypher.h"
 #include "print_debug.h"
+#include "inverse.h"
 
 #define N 32
 
@@ -25,24 +26,25 @@ int main() {
     key_schedule(key, expanded_key);
     print_word_arr(expanded_key, 60, 4);
 
-    print_word(expanded_key[0], true);
-    printf("\n");
-
-
     char *plaintext_string = "6BC1BEE22E409F96E93D7E117393172A";
     byte *pt = malloc(16 * sizeof(byte));
     key_string_to_bytes(plaintext_string, pt);
 
-    word *s = (word *) pt;
-    print_state(s);
+    {
+        word *s = (word *) pt;
+        print_state(s);
 
-    print_word(expanded_key[0], true);
+        encrypt(s, expanded_key);
+        decrypt(s, expanded_key);
 
-    printf("\n");
-    encrypt(s, expanded_key);
-
-
+        print_state(s);
+    }
     word state[] = {0x03020100, 0x07060504, 0x0b0a0908, 0x0f0e0d0c};
+
+    encrypt(state, expanded_key);
+    decrypt(state, expanded_key);
+
+    print_state(state);
 
     return 0;
 }
