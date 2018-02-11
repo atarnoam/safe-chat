@@ -2,6 +2,7 @@
 // Created by Rami on 26/01/2018.
 //
 
+#include <assert.h>
 #include "inverse.h"
 
 // rotate w left by i bytes
@@ -59,7 +60,6 @@ void decrypt(word ciphertext[4], const word expanded_key[]) {
     const word *curr_key = expanded_key + 4 * 59;
     add_round_key(ciphertext, curr_key);
     curr_key -= 4;
-
     for (int i = 1; i < 14; ++i, curr_key -= 4) {
         inv_shift_rows(ciphertext);
         inv_sub_bytes(ciphertext);
