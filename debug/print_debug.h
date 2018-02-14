@@ -35,6 +35,6 @@ inline void print_word(word a, bool newl) {
 
 void print_state(word s[]);
 
-void key_string_to_bytes(const char str[N * 2], byte key[N]);
+void hex_string_to_bytes(const char str[], byte arr[], size_t n);
 
 #endif //AES_PRINT_DEBUG_H

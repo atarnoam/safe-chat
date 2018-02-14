@@ -8,6 +8,7 @@
 #include "cypher.h"
 #include "print_debug.h"
 #include "inverse.h"
+#include "cbc.h"
 
 #define N 32
 
@@ -18,7 +19,7 @@ int main() {
     printf("%ld\n", strlen(key_string));
 
     byte *key = malloc(32 * sizeof(byte));
-    key_string_to_bytes(key_string, key);
+    hex_string_to_bytes(key_string, key, 32);
 
     print_byte_arr(key, 32, 16);
 
@@ -26,25 +27,18 @@ int main() {
     key_schedule(key, expanded_key);
     print_word_arr(expanded_key, 60, 4);
 
-    char *plaintext_string = "6BC1BEE22E409F96E93D7E117393172A";
-    byte *pt = malloc(16 * sizeof(byte));
-    key_string_to_bytes(plaintext_string, pt);
+    char *iv_string = "16161616161616161616161616161616";
+    byte *iv = malloc(16 * sizeof(byte));
+    hex_string_to_bytes(iv_string, iv, 16);
 
-    {
-        word *s = (word *) pt;
-        print_state(s);
+    char *pt_string = "64646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464";
+    size_t pt_size = 64;
+    byte *pt = malloc(pt_size * sizeof(byte));
+    hex_string_to_bytes(pt_string, pt, pt_size);
 
-        encrypt(s, expanded_key);
-        decrypt(s, expanded_key);
+    cbc_encrypt((word *) pt, expanded_key, (word *) iv, pt_size);
 
-        print_state(s);
-    }
-    word state[] = {0x03020100, 0x07060504, 0x0b0a0908, 0x0f0e0d0c};
-
-    encrypt(state, expanded_key);
-    decrypt(state, expanded_key);
-
-    print_state(state);
+    print_byte_arr(pt, pt_size, 16);
 
     return 0;
 }

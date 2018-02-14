@@ -32,9 +32,9 @@ void print_word_arr(const word *a, size_t n, size_t row_size) {
     printf("\n");
 }
 
-void key_string_to_bytes(const char str[N * 2], byte key[N]) {
-    for (int i = 0; i < 2 * N; i += 2) {
+void hex_string_to_bytes(const char str[], byte arr[], size_t n) {
+    for (int i = 0; i < 2 * n; i += 2) {
         char temp[] = {str[i], str[i + 1], '\0'};
-        key[i / 2] = (byte) strtol(temp, NULL, 16);
+        arr[i / 2] = (byte) strtol(temp, NULL, 16);
     }
 }
