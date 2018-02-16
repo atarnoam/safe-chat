@@ -2,11 +2,11 @@
 // Created by Rami on 16/02/2018.
 //
 
-#include <python2.7/Python.h>
+#include <Python.h>
 
 static PyObject *hello_aes(PyObject *self, PyObject *args) {
     printf("hello\n");
-    return NULL;
+    Py_RETURN_NONE;
 }
 
 static PyMethodDef AESMethods[] = {
@@ -16,7 +16,6 @@ static PyMethodDef AESMethods[] = {
 };
 
 
-PyMODINIT_FUNC
-initaes(void) {
-    (void) Py_InitModule("spam", AESMethods);
+PyMODINIT_FUNC initaes(void) {
+    (void) Py_InitModule("aes", AESMethods);
 }
