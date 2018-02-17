@@ -47,9 +47,9 @@ void div(short f, byte g, byte *res) {
     short h = f;
     byte q = 0, monom;
     while (deg(h) >= deg(g)) {
-        monom = (byte) 1 << deg(h) - deg(g);
+        monom = (byte) 1 << (deg(h) - deg(g));
         q = ADD(q, monom);
-        h = ADD(h, (byte) (g << deg(h) - deg(g)));
+        h = ADD(h, (byte) (g << (deg(h) - deg(g))));
     }
     res[0] = q;
     res[1] = (byte) h;

@@ -2,7 +2,7 @@
 // Created by Rami on 16/02/2018.
 //
 
-#include <Python.h>
+#include <python2.7/Python.h>
 #include "key_schedule.h"
 
 
@@ -12,19 +12,19 @@ static PyObject *hello_aes(PyObject *self, PyObject *args) {
 }
 
 static PyObject *key_expansion_aes(PyObject *self, PyObject *args) {
-    const PyObject *key_obj;
-    const Py_buffer *key;
+    PyObject *key_obj;
+    Py_buffer *key;
 
     if (!PyArg_ParseTuple(args, "0", &key_obj))
         return NULL;
-    if (!PyObject_CheckBuffer)
+    if (!PyObject_CheckBuffer(key_obj))
         return NULL;
     if (!PyObject_GetBuffer(key_obj, key, PyBUF_SIMPLE))
         return NULL;
 
     // allocate the expanded key
-    byte* expanded_key_bytes = PyMem_Malloc(240*sizeof(byte));
-    if (!expanded_key)
+    word* expanded_key_bytes = PyMem_Malloc(60*sizeof(byte));
+    if (!expanded_key_bytes)
         return NULL;
 
     key_schedule(key->buf, expanded_key_bytes);
