@@ -1,5 +1,5 @@
 //
-// Created by Rami on 14/02/2018.
+// Created by Noam on 14/02/2018.
 //
 
 #include <stdio.h>
@@ -93,6 +93,13 @@ void cbc_decrypt(word *ciphertext, const word *expanded_key, const word *iv, siz
     free(temp);
 }
 
+static inline long size_of_file(FILE *f) {
+    fseek(f, 0L, SEEK_END);
+    long sz = ftell(f);
+    rewind(f);
+    return sz;
+}
+
 int decrypt_file(const char* input_name, const char* output_name, const word *expanded_key, const word* iv) {
     FILE *input, *output;
     if (!(input = fopen(input_name, "rb"))) {
@@ -110,11 +117,14 @@ int decrypt_file(const char* input_name, const char* output_name, const word *ex
         return -1;
     }
 
+    long sz = size_of_file(input);
+    long num_of_steps = sz - (sz % 16)? 0 : 1;
+
     word* prev = malloc(AES_BLOCK_SIZE), *temp = malloc(AES_BLOCK_SIZE);
     memcpy(prev, iv, AES_BLOCK_SIZE);
 
-    size_t read;
-    while ((read = fread(buffer, sizeof(byte), BLOCK_SIZE, input)) == BLOCK_SIZE) {
+    size_t read = fread(buffer, sizeof(byte), BLOCK_SIZE, input);
+    for(long i = 0; i < num_of_steps - 1; i++, read = fread(buffer, sizeof(byte), BLOCK_SIZE, input)) {
         memcpy(temp, buffer + (BLOCK_SIZE - AES_BLOCK_SIZE) / sizeof(word), AES_BLOCK_SIZE);
         cbc_decrypt(buffer, expanded_key, prev, BLOCK_SIZE);
         memcpy(prev, temp, AES_BLOCK_SIZE);
