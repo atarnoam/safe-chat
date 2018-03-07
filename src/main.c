@@ -16,7 +16,7 @@ extern inline void print_word(word a, bool newl);
 
 int main() {
     char *key_string = "603DEB1015CA71BE2B73AEF0857D77811F352C073B6108D72D9810A30914DFF4";
-    printf("%ld\n", strlen(key_string));
+    printf("%u \n", strlen(key_string));
 
     byte *key = malloc(32 * sizeof(byte));
     hex_string_to_bytes(key_string, key, 32);
@@ -37,8 +37,12 @@ int main() {
     hex_string_to_bytes(pt_string, pt, pt_size);
 
     cbc_encrypt((word *) pt, expanded_key, (word *) iv, pt_size);
-
     print_byte_arr(pt, pt_size, 16);
 
+    cbc_decrypt((word *)pt, expanded_key, (word *) iv, pt_size);
+    print_byte_arr(pt, pt_size, 16);
+
+    printf("%d\n", encrypt_file("to_encrypt.txt", "encrypted.txt", expanded_key, (word *)iv));
+    printf("%d\n", decrypt_file("encrypted.txt", "decrypted.txt", expanded_key, (word *)iv));
     return 0;
 }
