@@ -118,22 +118,22 @@ int decrypt_file(const char* input_name, const char* output_name, const word *ex
     }
 
     long sz = size_of_file(input);
-    long num_of_steps = sz - (sz % 16)? 0 : 1;
+    long num_of_steps = (sz / BLOCK_SIZE) - ((sz % BLOCK_SIZE)? 0 : 1);
 
     word* prev = malloc(AES_BLOCK_SIZE), *temp = malloc(AES_BLOCK_SIZE);
     memcpy(prev, iv, AES_BLOCK_SIZE);
 
     size_t read = fread(buffer, sizeof(byte), BLOCK_SIZE, input);
-    for(long i = 0; i < num_of_steps - 1; i++, read = fread(buffer, sizeof(byte), BLOCK_SIZE, input)) {
+    for(long i = 0; i < num_of_steps; i++) {
         memcpy(temp, buffer + (BLOCK_SIZE - AES_BLOCK_SIZE) / sizeof(word), AES_BLOCK_SIZE);
         cbc_decrypt(buffer, expanded_key, prev, BLOCK_SIZE);
         memcpy(prev, temp, AES_BLOCK_SIZE);
         fwrite(buffer, sizeof(byte), BLOCK_SIZE, output);
+        read = fread(buffer, sizeof(byte), BLOCK_SIZE, input);
     }
     if (read) {
         cbc_decrypt(buffer, expanded_key, prev, read);
         byte padded = ((byte*)buffer)[read-1];
-        printf("padded: %d\n", padded);
         read -= padded? padded: 16;
         fwrite(buffer, sizeof(byte), read, output);
     }

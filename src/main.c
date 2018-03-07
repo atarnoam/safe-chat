@@ -2,47 +2,78 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <unistd.h>
 
 #include "gf_operations.h"
 #include "key_schedule.h"
-#include "cypher.h"
-#include "print_debug.h"
-#include "inverse.h"
 #include "cbc.h"
-
-#define N 32
+#include "base64.h"
 
 extern inline void print_word(word a, bool newl);
 
-int main() {
-    char *key_string = "603DEB1015CA71BE2B73AEF0857D77811F352C073B6108D72D9810A30914DFF4";
-    printf("%u \n", strlen(key_string));
+/* The program takes 5 arguments:
+ * 1. The mode of operation (encoding / decoding).
+ * 2. The name of the input file.
+ * 3. The name of the output file.
+ * 4. The key.
+ * 5. The initialization vector (iv).
+ */
 
-    byte *key = malloc(32 * sizeof(byte));
-    hex_string_to_bytes(key_string, key, 32);
+int main(int argc, char* argv[]) {
+    if (argc != 6) {
+        fprintf(stderr, "Usage: %s [-ed] input output key iv", argv[0]);
+        return 1;
+    }
+    char mode = 0;
+    int c;
 
-    print_byte_arr(key, 32, 16);
+    while ((c = getopt(argc, argv, "ed")) != -1)
+        switch (c)
+        {
+            case 'e':
+                mode = 'e';
+                break;
+            case 'd':
+                mode = 'd';
+                break;
+            default:
+                fprintf(stderr, "Usage: %s [-ed] input output key iv\n", argv[0]);
+        }
+
+    if (strlen(argv[4]) != 44) {
+        fprintf(stderr, "Size of key must be 32 chars (the base64 must be 44 chars).\n");
+        return 1;
+    }
+    byte* key = malloc(33);
+    if (!key) {
+        fprintf(stderr, "Out of memory.\n");
+        return 1;
+    }
+    Base64decode((char *)key, argv[4]);
 
     word *expanded_key = malloc(60 * sizeof(word));
+    if (!expanded_key) {
+        fprintf(stderr, "Out of memory.\n");
+        return 1;
+    }
+
     key_schedule(key, expanded_key);
-    print_word_arr(expanded_key, 60, 4);
 
-    char *iv_string = "16161616161616161616161616161616";
-    byte *iv = malloc(16 * sizeof(byte));
-    hex_string_to_bytes(iv_string, iv, 16);
+    if (strlen(argv[5]) != 24) {
+        fprintf(stderr, "Size of key must be 16 chars (the base64 must be 24 chars).\n");
+        return 1;
+    }
+    word* iv = malloc(17);
+    if (!iv) {
+        fprintf(stderr, "Out of memory.\n");
+        return 1;
+    }
+    Base64decode((char*)iv, argv[5]);
 
-    char *pt_string = "64646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464646464";
-    size_t pt_size = 64;
-    byte *pt = malloc(pt_size * sizeof(byte));
-    hex_string_to_bytes(pt_string, pt, pt_size);
+    if (mode == 'e')
+        encrypt_file(argv[1], argv[2], expanded_key, iv);
+    else
+        decrypt_file(argv[1], argv[2], expanded_key, iv);
 
-    cbc_encrypt((word *) pt, expanded_key, (word *) iv, pt_size);
-    print_byte_arr(pt, pt_size, 16);
-
-    cbc_decrypt((word *)pt, expanded_key, (word *) iv, pt_size);
-    print_byte_arr(pt, pt_size, 16);
-
-    printf("%d\n", encrypt_file("to_encrypt.txt", "encrypted.txt", expanded_key, (word *)iv));
-    printf("%d\n", decrypt_file("encrypted.txt", "decrypted.txt", expanded_key, (word *)iv));
     return 0;
 }

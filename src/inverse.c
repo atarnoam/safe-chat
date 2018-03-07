@@ -1,5 +1,5 @@
 //
-// Created by Rami on 26/01/2018.
+// Created by Noam on 26/01/2018.
 //
 
 #include "inverse.h"

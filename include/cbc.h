@@ -1,5 +1,5 @@
 //
-// Created by Rami on 14/02/2018.
+// Created by Noam on 14/02/2018.
 //
 
 #ifndef AES_CBC_H
